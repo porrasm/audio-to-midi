@@ -33,13 +33,15 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.fileNameLabel = new System.Windows.Forms.Label();
+            this.analyzeAudioButton = new System.Windows.Forms.Button();
             this.loadFileButton = new System.Windows.Forms.Button();
             this.waveViewer1 = new NAudio.Gui.WaveViewer();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.analyzeAudioButton = new System.Windows.Forms.Button();
             this.analyzeTab = new System.Windows.Forms.TabPage();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.playSoundButton = new System.Windows.Forms.Button();
             this.frequencyChart = new PitchToMidi.GUI.FrequencyChart();
+            this.generateAudioButton = new System.Windows.Forms.Button();
             this.mainTabs.SuspendLayout();
             this.audioTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -56,6 +58,7 @@
             this.analyzeTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
             this.splitContainer4.Panel1.SuspendLayout();
+            this.splitContainer4.Panel2.SuspendLayout();
             this.splitContainer4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.frequencyChart)).BeginInit();
             this.SuspendLayout();
@@ -123,6 +126,7 @@
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.playSoundButton);
             this.splitContainer2.Panel2.Controls.Add(this.analyzeAudioButton);
             this.splitContainer2.Panel2.Controls.Add(this.loadFileButton);
             this.splitContainer2.Size = new System.Drawing.Size(786, 209);
@@ -152,6 +156,15 @@
             this.fileNameLabel.TabIndex = 0;
             this.fileNameLabel.Text = "Loaded file: ";
             // 
+            // analyzeAudioButton
+            // 
+            this.analyzeAudioButton.Location = new System.Drawing.Point(3, 160);
+            this.analyzeAudioButton.Name = "analyzeAudioButton";
+            this.analyzeAudioButton.Size = new System.Drawing.Size(122, 46);
+            this.analyzeAudioButton.TabIndex = 1;
+            this.analyzeAudioButton.Text = "Analyze frequency data";
+            this.analyzeAudioButton.UseVisualStyleBackColor = true;
+            // 
             // loadFileButton
             // 
             this.loadFileButton.Location = new System.Drawing.Point(3, 3);
@@ -171,19 +184,6 @@
             this.waveViewer1.StartPosition = ((long)(0));
             this.waveViewer1.TabIndex = 0;
             this.waveViewer1.WaveStream = null;
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "openFileDialog1";
-            // 
-            // analyzeAudioButton
-            // 
-            this.analyzeAudioButton.Location = new System.Drawing.Point(4, 81);
-            this.analyzeAudioButton.Name = "analyzeAudioButton";
-            this.analyzeAudioButton.Size = new System.Drawing.Size(122, 46);
-            this.analyzeAudioButton.TabIndex = 1;
-            this.analyzeAudioButton.Text = "Analyze frequency data";
-            this.analyzeAudioButton.UseVisualStyleBackColor = true;
             // 
             // analyzeTab
             // 
@@ -205,9 +205,26 @@
             // splitContainer4.Panel1
             // 
             this.splitContainer4.Panel1.Controls.Add(this.frequencyChart);
+            // 
+            // splitContainer4.Panel2
+            // 
+            this.splitContainer4.Panel2.Controls.Add(this.generateAudioButton);
             this.splitContainer4.Size = new System.Drawing.Size(786, 418);
             this.splitContainer4.SplitterDistance = 626;
             this.splitContainer4.TabIndex = 0;
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog1";
+            // 
+            // playSoundButton
+            // 
+            this.playSoundButton.Location = new System.Drawing.Point(2, 55);
+            this.playSoundButton.Name = "playSoundButton";
+            this.playSoundButton.Size = new System.Drawing.Size(122, 46);
+            this.playSoundButton.TabIndex = 2;
+            this.playSoundButton.Text = "Play audio";
+            this.playSoundButton.UseVisualStyleBackColor = true;
             // 
             // frequencyChart
             // 
@@ -226,6 +243,15 @@
             this.frequencyChart.Size = new System.Drawing.Size(626, 418);
             this.frequencyChart.TabIndex = 0;
             this.frequencyChart.Text = "frequencyChart1";
+            // 
+            // generateAudioButton
+            // 
+            this.generateAudioButton.Location = new System.Drawing.Point(2, 3);
+            this.generateAudioButton.Name = "generateAudioButton";
+            this.generateAudioButton.Size = new System.Drawing.Size(151, 51);
+            this.generateAudioButton.TabIndex = 1;
+            this.generateAudioButton.Text = "Generate audio";
+            this.generateAudioButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -251,6 +277,7 @@
             this.splitContainer3.ResumeLayout(false);
             this.analyzeTab.ResumeLayout(false);
             this.splitContainer4.Panel1.ResumeLayout(false);
+            this.splitContainer4.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
             this.splitContainer4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.frequencyChart)).EndInit();
@@ -274,5 +301,7 @@
         private System.Windows.Forms.TabPage analyzeTab;
         private System.Windows.Forms.SplitContainer splitContainer4;
         private FrequencyChart frequencyChart;
+        private System.Windows.Forms.Button playSoundButton;
+        private System.Windows.Forms.Button generateAudioButton;
     }
 }

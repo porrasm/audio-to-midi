@@ -15,6 +15,8 @@ namespace PitchToMidi.GUI {
         #region fields
         private SoundFile loadedSoundFile;
         private AudioFrequencyAnalyzer analyzer;
+
+        private WaveOut waveOut;
         #endregion
 
         public MainForm() {
@@ -27,11 +29,11 @@ namespace PitchToMidi.GUI {
 
             loadFileButton.Click += new EventHandler((sender, e) => LoadFile());
             analyzeAudioButton.Click += new EventHandler((sender, e) => AnalyzeFrequencyData());
+            playSoundButton.Click += new EventHandler((sender, e) => PlayAudio());
+            generateAudioButton.Click += new EventHandler((sender, e) => GenerateAudio());
         }
 
         #region audio tab
-        
-
         public void LoadFile() {
 
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
@@ -67,9 +69,48 @@ namespace PitchToMidi.GUI {
 
             mainTabs.SelectedTab = analyzeTab;
         }
+
+        public void PlayAudio() {
+            if (loadedSoundFile == null || loadedSoundFile.SampleCount == 0) {
+                return;
+            }
+
+            if (waveOut != null) {
+                if (waveOut.PlaybackState == PlaybackState.Playing) {
+                    waveOut.Stop();
+                    return;
+                }
+            }
+
+            waveOut = null;
+            waveOut = new WaveOut();
+            waveOut.Init(loadedSoundFile.GetStream());
+
+            waveOut.Play();
+        }
         #endregion
 
         #region analyze tab
+        public void GenerateAudio() {
+            if (waveOut != null) {
+                if (waveOut.PlaybackState == PlaybackState.Playing) {
+                    waveOut.Stop();
+                    return;
+                }
+            }
+
+            if (analyzer.FrequencyData == null || analyzer.FrequencyData.EventCount == 0) {
+                return;
+            }
+
+            SoundFile generated = SoundFile.GenerateFromFrequencyData(analyzer.FrequencyData);
+
+            waveOut = null;
+            waveOut = new WaveOut();
+            waveOut.Init(generated.GetStream());
+
+            waveOut.Play();
+        }
         #endregion
     }
 }

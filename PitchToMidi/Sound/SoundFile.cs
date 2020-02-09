@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using PitchToMidi.SoundAnalysis;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,10 +22,18 @@ namespace PitchToMidi {
         private double[] rawData;
 
         public double[] ChannelSamples;
+
+        public SoundFileType Type { get; private set; }
+
+        public enum SoundFileType {
+            File,
+            Generated
+        }
         #endregion
 
         public SoundFile(string path) {
             this.Path = path;
+            Type = SoundFileType.File;
         }
 
         public double Length {
@@ -60,9 +69,9 @@ namespace PitchToMidi {
 
                 Console.WriteLine("Channels: " + Channels);
 
-                WaveFileReader reader = GetStream();
+                WaveFileReader reader = GetFileReader();
                 Format = reader.WaveFormat;
-     
+
                 byte[] buffer = new byte[reader.Length];
 
                 int read = reader.Read(buffer, 0, buffer.Length);
@@ -74,8 +83,8 @@ namespace PitchToMidi {
                 }
 
                 SampleCount = rawData.Length;
-                ChannelSampleCount = SampleCount/ Channels;
-                
+                ChannelSampleCount = SampleCount / Channels;
+
                 return true;
 
             } catch (Exception) {
@@ -103,16 +112,88 @@ namespace PitchToMidi {
             return samples;
         }
 
-        public WaveFileReader GetStream() {
+        public WaveStream GetStream() {
+            if (Type == SoundFileType.File) {
+                return GetFileReader();
+            }
+            if (Type == SoundFileType.Generated) {
+                return GetRawStream();
+            }
+            return null;
+        }
+        private WaveFileReader GetFileReader() {
             if (!File.Exists(Path)) {
                 Console.WriteLine("File doesn't exist: " + Path);
                 return null;
             }
             return new WaveFileReader(Path);
         }
+        private RawSourceWaveStream GetRawStream() {
+
+            byte[] bytes = new byte[rawData.Length * 2];
+            for (int i = 0; i < rawData.Length; i++) {
+                short sampleValue = (short)(rawData[i] * 32768.0);
+                byte[] values = BitConverter.GetBytes(sampleValue);
+                bytes[i * 2] = values[0];
+                bytes[i * 2 + 1] = values[1];
+            }
+
+            return new RawSourceWaveStream(bytes, 0, bytes.Length, Format);
+        }
 
         public static string DebugFilePath(string filename) {
             return "P:/Stuff/Projects/PitchToMidi/PitchToMidi/Audio/" + filename + ".wav";
+
+        }
+
+        public static SoundFile GenerateFromFrequencyData(AudioFrequencyData audio) {
+
+            double[] samples = new double[audio.SampleCount];
+
+            List<SampleIndexFrequency> indexFreqs = new List<SampleIndexFrequency>();
+
+            foreach (NoteEvent e in audio.Events) {
+
+                if (e.Type == NoteEventType.End) {
+                    continue;
+                }
+
+                Console.WriteLine("Adding from " + e.SampleStart + " with freq: " + e.Frequency);
+
+                for (int i = 0; i < audio.SampleStep; i++) {
+
+                    SampleIndexFrequency iFreq = new SampleIndexFrequency();
+                    iFreq.SampleIndex = e.SampleStart + i;
+                    iFreq.Frequency = e.Frequency;
+
+                    indexFreqs.Add(iFreq);
+                }
+            }
+
+            foreach (SampleIndexFrequency iFreq in indexFreqs) {
+                int i = iFreq.SampleIndex;
+                float frequency = (float)iFreq.Frequency;
+                if (i >= audio.SampleCount) {
+                    break;
+                }
+                samples[i] = Math.Sin(Math.PI * 2 * i * frequency / (audio.SampleRate));
+            }
+
+            SoundFile sound = new SoundFile(null);
+            sound.Type = SoundFileType.Generated;
+
+            sound.Channels = 1;
+            sound.ChannelSampleCount = audio.SampleCount;
+            sound.SampleCount = audio.SampleCount;
+            sound.rawData = samples;
+            sound.SetChannel(0);
+            sound.Format = new WaveFormat(audio.SampleRate, 16, 1);
+
+            return sound;
+        }
+        private struct SampleIndexFrequency {
+            public int SampleIndex;
+            public double Frequency;
         }
     }
 }
