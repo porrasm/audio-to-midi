@@ -37,8 +37,6 @@ namespace PitchToMidi.SoundAnalysis {
                 if (Events[Events.Count - 1].Type != NoteEventType.End || time == SampleCount - 1) {
                     Events.Add(NoteEvent.EndEvent(time));
                 }
-            } else {
-                Events.Add(NoteEvent.EndEvent(time));
             }
         }
 

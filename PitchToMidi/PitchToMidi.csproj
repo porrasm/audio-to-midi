@@ -16,7 +16,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -75,11 +75,20 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\KeyState.cs" />
+    <Compile Include="GUI\FrequencyChartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FrequencyChartForm.Designer.cs">
+      <DependentUpon>FrequencyChartForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\TestChart.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,6 +105,9 @@
     <Compile Include="SoundAnalysis\SpectrumAnalyzer.cs" />
     <Compile Include="Sound\SoundFile.cs" />
     <Compile Include="TestThing.cs" />
+    <EmbeddedResource Include="GUI\FrequencyChartForm.resx">
+      <DependentUpon>FrequencyChartForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

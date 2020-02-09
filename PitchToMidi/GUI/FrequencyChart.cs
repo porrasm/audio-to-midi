@@ -24,24 +24,53 @@ namespace PitchToMidi.GUI {
         private KeyState chartKeys;
         #endregion
 
-        public FrequencyChart() {
-            chartKeys = new KeyState();
-            InitializeChart();
-        }
-
         public void Clear() {
             Series.Clear();
         }
         public void AddFrequencyData(AudioFrequencyData data, string name) {
 
-            Series series = NewSeries(name);
+            Series freq = CreateNewSeries(name);
+
+            freq.Points.Clear();
+            freq.Points.Add(new DataPoint { IsEmpty = true });
+
+            double lowest = 127;
+            double highest = 0;
 
             foreach (NoteEvent e in data.Events) {
-                series.Points.AddXY(data.NoteToTime(e), e.Note.AccurateMidiNote);
+
+                double x = data.NoteToTime(e);
+                double y = e.Note.AccurateMidiNote;
+
+                //double ampY = e.Amplitude * 500;
+
+                if (e.Type == NoteEventType.End) {
+                    freq.Points.Add(new DataPoint { IsEmpty = true, XValue = x, YValues = new double[] { y } });
+                    //amp.Points.Add(new DataPoint { IsEmpty = true, XValue = x, YValues = new double[] { y } }) ;
+                    continue;
+                }
+
+                if (y < lowest) {
+                    lowest = y;
+                }
+                if (y > highest) {
+                    highest = y;
+                }
+
+                freq.Points.AddXY(x, y);
+                //amp.Points.AddXY(x, ampY);
+            }
+            
+            if (lowest < highest) {
+                Area.AxisY.ScaleView.Zoom(lowest, highest);
             }
         }
 
         public void InitializeChart() {
+
+            ChartAreas.Clear();
+            Series.Clear();
+            chartKeys = new KeyState();
 
             ChartArea area = new ChartArea("Frequency data");
 
@@ -60,12 +89,16 @@ namespace PitchToMidi.GUI {
             area.AxisY.MajorGrid.LineColor = Color.Gray;
 
             for (int i = 0; i < 128; i++) {
-                area.AxisY.CustomLabels.Add(new CustomLabel(i, i + 0.05, Note.NoteToString(i), 0, LabelMarkStyle.Box));
+                string text = Frequencies.NoteToFrequency(i) + " - " + Note.NoteToString(i);
+                text = Note.NoteToString(i);
+                area.AxisY.CustomLabels.Add(new CustomLabel(i, i + 0.05, text, 0, LabelMarkStyle.Box));
             }
 
             area.BackColor = Color.LightGray;
 
-            ChartAreas[0] = area;
+            ChartAreas[area.Name] = area;
+
+            Console.WriteLine("Area count: " + ChartAreas.Count);
 
             KeyDown += new KeyEventHandler(ChartKeyDown);
             KeyUp += new KeyEventHandler(ChartKeyUp);
@@ -77,10 +110,14 @@ namespace PitchToMidi.GUI {
             MouseWheel += new MouseEventHandler(OnChartMouseWheel);
         }
 
-        public Series NewSeries(string name) {
+        public Series CreateNewSeries(string name) {
             Series series = new Series(name);
-            series.BorderWidth = 2;
-            series.ChartType = SeriesChartType.Line;
+            series.BorderWidth = 3;
+            series.ChartType = SeriesChartType.FastLine;
+
+            series.EmptyPointStyle.Color = Color.Transparent;
+
+            Series[series.Name] = series;
             return series;
         }
 
@@ -179,7 +216,7 @@ namespace PitchToMidi.GUI {
             double yOffset = Area.AxisY.ScaleView.Position % 1;
 
             Area.AxisX.MajorGrid.IntervalOffset = -xOffset;
-            Area.AxisY.MajorGrid.IntervalOffset = -yOffset;
+            Area.AxisY.MajorGrid.IntervalOffset = -yOffset - 0.5;
         }
 
         private ChartArea Area {

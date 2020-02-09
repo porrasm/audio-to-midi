@@ -13,6 +13,7 @@ namespace PitchToMidi {
         public string Path { get; set; }
 
         public int Channels { get; private set; }
+        public int SelectedChannel { get; private set; } = -1;
         public int SampleCount { get; private set; }
         public int ChannelSampleCount { get; private set; }
         public WaveFormat Format { get; private set; }
@@ -34,6 +35,8 @@ namespace PitchToMidi {
 
         public void SetChannel(int channel) {
 
+            SelectedChannel = channel;
+
             ChannelSamples = new double[ChannelSampleCount];
 
             int sIndex = 0;
@@ -50,12 +53,14 @@ namespace PitchToMidi {
                 return false;
             }
 
+            SampleCount = 0;
+
             try {
                 Channels = GetChannelAmount();
 
                 Console.WriteLine("Channels: " + Channels);
 
-                WaveFileReader reader = new WaveFileReader(Path);
+                WaveFileReader reader = GetStream();
                 Format = reader.WaveFormat;
      
                 byte[] buffer = new byte[reader.Length];
@@ -96,6 +101,14 @@ namespace PitchToMidi {
             }
 
             return samples;
+        }
+
+        public WaveFileReader GetStream() {
+            if (!File.Exists(Path)) {
+                Console.WriteLine("File doesn't exist: " + Path);
+                return null;
+            }
+            return new WaveFileReader(Path);
         }
 
         public static string DebugFilePath(string filename) {

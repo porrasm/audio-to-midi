@@ -33,7 +33,7 @@ namespace PitchToMidi {
 
                 double[] buffer = AudioFile.ReadSamples(sampleOffset, SampleStep, 0);
 
-                Console.WriteLine("Buffer:" + buffer[0] + "Offset: " + sampleOffset + ", step: " + SampleStep + ", sampleCOunt: " + AudioFile.ChannelSampleCount);
+                //Console.WriteLine("Buffer:" + buffer[0] + "Offset: " + sampleOffset + ", step: " + SampleStep + ", sampleCOunt: " + AudioFile.ChannelSampleCount);
 
                 //for (int i = 0; i < buffer.Length; i++) {
                 //    Console.WriteLine("Buffer " + i + ": " + buffer[i]);
@@ -50,7 +50,7 @@ namespace PitchToMidi {
 
                 if (!analyzer.FrequencyWasFound()) {
                     FrequencyData.EndNote(sampleOffset);
-                    Console.WriteLine("Not found: first buf: " + buffer[0]);
+                    //Console.WriteLine("Not found: first buf: " + buffer[0]);
                     continue;
                 }
 
@@ -76,7 +76,7 @@ namespace PitchToMidi {
             FrequencyData.EndNote(AudioFile.ChannelSampleCount - 1);
 
             Console.WriteLine("Processing complete, event count: " + FrequencyData.EventCount);
-            
+
         }
 
         private double[] FFT(double[] data) {
