@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using PitchToMidi.MIDI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,7 @@ namespace PitchToMidi.GUI {
         #region fields
         private SoundFile loadedSoundFile;
         private AudioFrequencyAnalyzer analyzer;
+        private MIDIPlayer midiPlayer;
 
         private WaveOut waveOut;
         #endregion
@@ -26,11 +28,21 @@ namespace PitchToMidi.GUI {
             openFileDialog.Filter = "wav files (*.wav)|*.wav|All files (*.*)|*.*";
 
             analyzer = new AudioFrequencyAnalyzer();
+            midiPlayer = new MIDIPlayer();
 
             loadFileButton.Click += new EventHandler((sender, e) => LoadFile());
             analyzeAudioButton.Click += new EventHandler((sender, e) => AnalyzeFrequencyData());
             playSoundButton.Click += new EventHandler((sender, e) => PlayAudio());
             generateAudioButton.Click += new EventHandler((sender, e) => GenerateAudio());
+            playMidiButton.Click += new EventHandler((sender, e) => PlayAsMidi());
+
+            Testing();
+        }
+
+        private void Testing() {
+            loadedSoundFile = new SoundFile(SoundFile.DebugFilePath("audioTest"));
+            loadedSoundFile.LoadFile();
+            AnalyzeFrequencyData();
         }
 
         #region audio tab
@@ -110,6 +122,18 @@ namespace PitchToMidi.GUI {
             waveOut.Init(generated.GetStream());
 
             waveOut.Play();
+        }
+
+        public void PlayAsMidi() {
+
+            if (analyzer.FrequencyData == null || analyzer.FrequencyData.EventCount == 0) {
+                return;
+            }
+
+            midiPlayer.SetFrequencyData(analyzer.FrequencyData);
+            midiPlayer.PlayAudioAsMidi();
+
+
         }
         #endregion
     }

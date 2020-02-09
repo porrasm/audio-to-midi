@@ -40,6 +40,14 @@ namespace PitchToMidi.SoundAnalysis {
             }
         }
 
+        public Queue<NoteEvent> AsQueue() {
+            Queue<NoteEvent> events = new Queue<NoteEvent>();
+            foreach (NoteEvent e in Events) {
+                events.Enqueue(e);
+            }
+            return events;
+        }
+
         public double SampleIndexToTime(int sampleTime, int samplesOffset = 0) {
             return 1.0 * (sampleTime + samplesOffset) / SampleRate;
         }
