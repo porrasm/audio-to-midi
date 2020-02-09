@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PitchToMidi.GUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ namespace PitchToMidi {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            Application.Run(new MainForm());
 
             Console.SetBufferSize(Console.BufferWidth, 25000);
 

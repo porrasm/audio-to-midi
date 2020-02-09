@@ -23,44 +23,35 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.frequencyChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            ((System.ComponentModel.ISupportInitialize)(this.frequencyChart)).BeginInit();
+            this.fader1 = new NAudio.Gui.Fader();
             this.SuspendLayout();
             // 
-            // frequencyChart
+            // fader1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.frequencyChart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.frequencyChart.Legends.Add(legend1);
-            this.frequencyChart.Location = new System.Drawing.Point(12, 12);
-            this.frequencyChart.Name = "frequencyChart";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.frequencyChart.Series.Add(series1);
-            this.frequencyChart.Size = new System.Drawing.Size(776, 426);
-            this.frequencyChart.TabIndex = 0;
-            this.frequencyChart.Text = "chart1";
+            this.fader1.Location = new System.Drawing.Point(382, 51);
+            this.fader1.Maximum = 0;
+            this.fader1.Minimum = 0;
+            this.fader1.Name = "fader1";
+            this.fader1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.fader1.Size = new System.Drawing.Size(8, 8);
+            this.fader1.TabIndex = 0;
+            this.fader1.Text = "fader1";
+            this.fader1.Value = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.frequencyChart);
+            this.Controls.Add(this.fader1);
             this.Name = "MainForm";
             this.Text = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)(this.frequencyChart)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataVisualization.Charting.Chart frequencyChart;
+        private NAudio.Gui.Fader fader1;
     }
 }

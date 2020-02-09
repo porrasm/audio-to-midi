@@ -27,6 +27,11 @@ namespace PitchToMidi.SoundAnalysis {
             return MidiNote + ": " + PrettyNote() + ": " + NoteFrequency;
         }
 
+        public static string NoteToString(int note) {
+            int n = note % 12;
+            int octave = note / 12 - 1;
+            return NoteString(n) + octave;
+        }
         private static string NoteString(int note) {
             switch (note) {
                 case 0:
