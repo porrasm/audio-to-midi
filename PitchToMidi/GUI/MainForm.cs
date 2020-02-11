@@ -19,6 +19,8 @@ namespace PitchToMidi.GUI {
         private MIDIPlayer midiPlayer;
 
         private WaveOut waveOut;
+
+        private SettingsForm settings;
         #endregion
 
         public MainForm() {
@@ -36,13 +38,26 @@ namespace PitchToMidi.GUI {
             generateAudioButton.Click += new EventHandler((sender, e) => GenerateAudio());
             playMidiButton.Click += new EventHandler((sender, e) => PlayAsMidi());
 
-            Testing();
+            settingsButton.Click += new EventHandler(OpenSettings);
+
+            Settings.OnAnalysisSettingsChange = AnalyzeFrequencyData;
+
+            //Testing();
         }
 
         private void Testing() {
             loadedSoundFile = new SoundFile(SoundFile.DebugFilePath("audioTest"));
             loadedSoundFile.LoadFile();
             AnalyzeFrequencyData();
+        }
+
+        public void OpenSettings(object sender, EventArgs e) {
+            if (settings != null) {
+                settings.Close();
+                settings.Dispose();
+            }
+            settings = new SettingsForm();
+            settings.Show();
         }
 
         #region audio tab

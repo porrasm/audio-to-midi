@@ -12,7 +12,6 @@ namespace PitchToMidi {
         #region fields
         public SoundFile AudioFile { get; private set; }
 
-        public int SampleStep { get; set; } = 1024;
         public AudioFrequencyData FrequencyData { get; private set; }
         #endregion
 
@@ -21,6 +20,12 @@ namespace PitchToMidi {
         }
 
         public void AnalyzeAudio() {
+
+            if (this.AudioFile == null || this.AudioFile.ChannelSampleCount == 0) {
+                return;
+            }
+
+            int SampleStep = Settings.Current.SampleStep;
 
             Console.WriteLine("To analyze length: " + AudioFile.ChannelSampleCount);
             Console.WriteLine("To analyze time: " + AudioFile.Length);
@@ -93,7 +98,7 @@ namespace PitchToMidi {
         }
 
         public double GetResolution() {
-            return 1.0 * AudioFile.Format.SampleRate / SampleStep;
+            return 1.0 * AudioFile.Format.SampleRate / Settings.Current.SampleStep;
         }
     }
 }

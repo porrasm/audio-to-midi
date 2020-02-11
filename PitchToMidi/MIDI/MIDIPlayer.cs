@@ -17,7 +17,7 @@ namespace PitchToMidi.MIDI {
 
         private int pitchBendRange = 12;
 
-        private int lastNote;
+        private Note lastNote;
 
         private int channel = 1;
         #endregion
@@ -51,41 +51,57 @@ namespace PitchToMidi.MIDI {
         }
         private void SendMIDI(NoteEvent e) {
 
-            if (e.Type == NoteEventType.End && lastNote > 0) {
+            if (e.Type == NoteEventType.End && lastNote.MidiNote > 0) {
                 Console.WriteLine("Ending note: " + e.Note);
-                midi.Send(MidiMessage.StopNote(lastNote, 0, channel).RawData);
-                lastNote = -1;
+                midi.Send(MidiMessage.StopNote(lastNote.MidiNote, 0, channel).RawData);
+                SendPitchBend();
+                lastNote = new Note(-1, 0, 0);
                 return;
             }
 
-            if (lastNote > 0) {
-                SendPitchBend(PitchBendValue(lastNote, e.Note.AccurateMidiNote));
+            if (lastNote.MidiNote > 0) {
+                SendPitchBend(PitchBendValue(lastNote, e.Note));
             } else {
-                lastNote = e.Note.MidiNote;
+                SendPitchBend(PitchBendValue(e.Note, e.Note));
+                midi.Send(MidiMessage.StartNote(e.Note.MidiNote, 80, channel).RawData);
+
+                lastNote = e.Note;
                 Console.WriteLine("Sending note: " + e.Note);
-                SendPitchBend(PitchBendValue(lastNote, e.Note.AccurateMidiNote));
-                midi.Send(MidiMessage.StartNote(lastNote, 80, channel).RawData);
             }
         }
 
-        private void SendPitchBend(short value) {
-
-            byte status = (byte)MidiCommandCode.PitchWheelChange;
-            byte[] datas = BitConverter.GetBytes(value);
-
-            Console.WriteLine("Sending pitch value: " + value);
-
-            MidiMessage m = new MidiMessage(status, datas[0], datas[1]);
-            midi.Send(m.RawData);
+        public void SendPitchBend(int value = 8192) {
+            int message = PitchEventMessage(value);
+            Console.WriteLine(message);
+            midi.Send(message);
         }
 
-        private short PitchBendValue(int note, double target) {
+        private int PitchEventMessage(int value) {
+            byte lowValue = (byte)(value & 0x7F);
+            byte highValue = (byte)(value >> 7);
+            return new MidiMessage((int)MidiCommandCode.PitchWheelChange, lowValue, highValue).RawData;
+        }
 
-            double pitchStep = 1.0 * pitchBendRange / 16384;
+        private int PitchBendValue(Note fromNote, Note target) {
 
-            short value = 8192;
+            Console.WriteLine("From Note: " + fromNote + ", target: " + target);
+            Console.WriteLine("Target_ " + target.AccurateMidiNote);
 
-            return (short)(value + ((target - note) / pitchStep));
+            double noteDiff = target.AccurateMidiNote - fromNote.AccurateMidiNote;
+
+            double pitchStep = 16384.0 / (2 * pitchBendRange);
+
+            short middle = 8192;
+
+            int val = (int)(middle + noteDiff * pitchStep);
+            if (val < 0) {
+                val = 0;
+            } else if (val >= 16384) {
+                val = 16384 - 1;
+            }
+
+            Console.WriteLine("Pitch val: " + val);
+            return val;
         }
     }
 }

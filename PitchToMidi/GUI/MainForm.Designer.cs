@@ -33,16 +33,17 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.fileNameLabel = new System.Windows.Forms.Label();
+            this.settingsButton = new System.Windows.Forms.Button();
             this.playSoundButton = new System.Windows.Forms.Button();
             this.analyzeAudioButton = new System.Windows.Forms.Button();
             this.loadFileButton = new System.Windows.Forms.Button();
             this.waveViewer1 = new NAudio.Gui.WaveViewer();
             this.analyzeTab = new System.Windows.Forms.TabPage();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.frequencyChart = new PitchToMidi.GUI.FrequencyChart();
-            this.generateAudioButton = new System.Windows.Forms.Button();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.playMidiButton = new System.Windows.Forms.Button();
+            this.generateAudioButton = new System.Windows.Forms.Button();
             this.mainTabs.SuspendLayout();
             this.audioTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -127,6 +128,7 @@
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.settingsButton);
             this.splitContainer2.Panel2.Controls.Add(this.playSoundButton);
             this.splitContainer2.Panel2.Controls.Add(this.analyzeAudioButton);
             this.splitContainer2.Panel2.Controls.Add(this.loadFileButton);
@@ -157,6 +159,15 @@
             this.fileNameLabel.TabIndex = 0;
             this.fileNameLabel.Text = "Loaded file: ";
             // 
+            // settingsButton
+            // 
+            this.settingsButton.Location = new System.Drawing.Point(2, 159);
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(122, 46);
+            this.settingsButton.TabIndex = 3;
+            this.settingsButton.Text = "Settings";
+            this.settingsButton.UseVisualStyleBackColor = true;
+            // 
             // playSoundButton
             // 
             this.playSoundButton.Location = new System.Drawing.Point(2, 55);
@@ -168,7 +179,7 @@
             // 
             // analyzeAudioButton
             // 
-            this.analyzeAudioButton.Location = new System.Drawing.Point(3, 160);
+            this.analyzeAudioButton.Location = new System.Drawing.Point(2, 107);
             this.analyzeAudioButton.Name = "analyzeAudioButton";
             this.analyzeAudioButton.Size = new System.Drawing.Size(122, 46);
             this.analyzeAudioButton.TabIndex = 1;
@@ -206,6 +217,10 @@
             this.analyzeTab.TabIndex = 2;
             this.analyzeTab.Text = "Analysis";
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog1";
+            // 
             // splitContainer4
             // 
             this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -242,19 +257,6 @@
             this.frequencyChart.TabIndex = 0;
             this.frequencyChart.Text = "frequencyChart1";
             // 
-            // generateAudioButton
-            // 
-            this.generateAudioButton.Location = new System.Drawing.Point(2, 3);
-            this.generateAudioButton.Name = "generateAudioButton";
-            this.generateAudioButton.Size = new System.Drawing.Size(151, 51);
-            this.generateAudioButton.TabIndex = 1;
-            this.generateAudioButton.Text = "Generate audio";
-            this.generateAudioButton.UseVisualStyleBackColor = true;
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "openFileDialog1";
-            // 
             // playMidiButton
             // 
             this.playMidiButton.Location = new System.Drawing.Point(3, 60);
@@ -263,6 +265,15 @@
             this.playMidiButton.TabIndex = 2;
             this.playMidiButton.Text = "Play as MIDI";
             this.playMidiButton.UseVisualStyleBackColor = true;
+            // 
+            // generateAudioButton
+            // 
+            this.generateAudioButton.Location = new System.Drawing.Point(2, 3);
+            this.generateAudioButton.Name = "generateAudioButton";
+            this.generateAudioButton.Size = new System.Drawing.Size(151, 51);
+            this.generateAudioButton.TabIndex = 1;
+            this.generateAudioButton.Text = "Generate audio";
+            this.generateAudioButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -315,5 +326,6 @@
         private System.Windows.Forms.Button playSoundButton;
         private System.Windows.Forms.Button generateAudioButton;
         private System.Windows.Forms.Button playMidiButton;
+        private System.Windows.Forms.Button settingsButton;
     }
 }

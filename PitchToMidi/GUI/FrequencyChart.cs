@@ -22,6 +22,8 @@ namespace PitchToMidi.GUI {
         private Point lastPoint;
 
         private KeyState chartKeys;
+
+        private double[] lineIntervalOffsets;
         #endregion
 
         public void Clear() {
@@ -66,6 +68,8 @@ namespace PitchToMidi.GUI {
             }
         }
 
+        
+
         public void InitializeChart() {
 
             ChartAreas.Clear();
@@ -98,6 +102,8 @@ namespace PitchToMidi.GUI {
 
             ChartAreas[area.Name] = area;
 
+            AddStriplines();
+
             Console.WriteLine("Area count: " + ChartAreas.Count);
 
             KeyDown += new KeyEventHandler(ChartKeyDown);
@@ -109,6 +115,24 @@ namespace PitchToMidi.GUI {
 
             MouseWheel += new MouseEventHandler(OnChartMouseWheel);
         }
+        private void AddStriplines() {
+
+            lineIntervalOffsets = new double[5] {1, 3, 6, 8, 10 };
+
+            for (int i = 0; i < 5; i++) {
+                StripLine line = StriplineConfig();
+                Area.AxisY.StripLines.Add(line);
+            }
+
+        }
+        private StripLine StriplineConfig() {
+            StripLine line = new StripLine();
+            line.BorderColor = Color.DarkGray;
+            line.Interval = 12;
+            return line;
+        }
+
+        
 
         public Series CreateNewSeries(string name) {
             Series series = new Series(name);
@@ -217,6 +241,17 @@ namespace PitchToMidi.GUI {
 
             Area.AxisX.MajorGrid.IntervalOffset = -xOffset;
             Area.AxisY.MajorGrid.IntervalOffset = -yOffset - 0.5;
+            
+            AdjustStriplines(yOffset);
+        }
+        private void AdjustStriplines(double yOffset) {
+            Area.AxisY.StripLines[0].IntervalOffset = -yOffset - 0.5;
+
+            for (int i = 0; i < 5; i++) {
+                StripLine line = Area.AxisY.StripLines[i];
+                line.IntervalOffset = -yOffset - 0.5 + lineIntervalOffsets[i];
+                line.BorderWidth = 5;
+            }
         }
 
         private ChartArea Area {

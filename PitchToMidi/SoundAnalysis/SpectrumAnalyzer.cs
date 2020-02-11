@@ -18,7 +18,6 @@ namespace PitchToMidi.SoundAnalysis {
 
         public int PeakWidth { get; set; } = 1;
         //public float MinAmplitude { get; set; } = 0.05f;
-        public double MinAmplitude { get; set; } = 0.05;
         #endregion
 
         public SpectrumAnalyzer(double resolution) {
@@ -37,7 +36,7 @@ namespace PitchToMidi.SoundAnalysis {
         public void CalculateFrequency() {
 
             int greatesIndex = -1;
-            double greatesAmplitude = MinAmplitude;
+            double greatesAmplitude = Settings.Current.MinAmplitude;
 
             for (int i = 0; i < samples; i++) {
                 if (spectrum[i] > greatesAmplitude) {

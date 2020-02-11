@@ -34,6 +34,8 @@ namespace PitchToMidi.SoundAnalysis {
         }
         private static string NoteString(int note) {
             switch (note) {
+                case -1:
+                    return "-";
                 case 0:
                     return "C";
                 case 1:
@@ -59,6 +61,7 @@ namespace PitchToMidi.SoundAnalysis {
                 case 11:
                     return "B";
             }
+            Console.WriteLine("NOTE WAS: " + note);
             throw new System.Exception("Invalid note");
         }
     }
