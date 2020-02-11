@@ -14,3 +14,4 @@ If you are suicidal enough to try this project at this stage, here are the instr
 - Microphone
 - [Download app](https://github.com/porrasm/audio-to-midi)
 
+Don't press the 'Generate audio' button unless you're prepared for earrape.
