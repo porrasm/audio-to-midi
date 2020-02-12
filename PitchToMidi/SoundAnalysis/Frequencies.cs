@@ -9,7 +9,7 @@ namespace PitchToMidi.SoundAnalysis {
 
         #region fields
         private const int A4NOTE = 69;
-        private const int A4FREQ = 440;
+        public const int A4FREQ = 440;
         private const double alpha = 1.059463094359;
 
         public static double[] NoteFrequencies { get; private set; }
@@ -17,10 +17,14 @@ namespace PitchToMidi.SoundAnalysis {
         #endregion
 
         static Frequencies() {
-            InitFrequencies();
+            CalculateFrequencies();
         }
 
-        public static void InitFrequencies() {
+        public static void Initliaze() {
+            Settings.SubscribeToSettingChange(Settings.Category.AudioAnalysis, CalculateFrequencies);
+        }
+
+        public static void CalculateFrequencies() {
 
             NoteFrequencies = new double[128];
             Notes = new Note[128];
@@ -122,7 +126,7 @@ namespace PitchToMidi.SoundAnalysis {
 
         #region helpers
         public static double NoteToFrequency(int n) {
-            return A4FREQ * Math.Pow(alpha, n);
+            return (A4FREQ + Settings.Current.TuneOffset.Value) * Math.Pow(alpha, n);
         }
         #endregion
     }
